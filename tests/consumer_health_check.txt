@@ -1,0 +1,5 @@
+run: docker inspect --format='{{json .State.Health}}' consumer
+
+down redis or rabbitmq
+
+run: docker inspect --format='{{json .State.Health}}' consumer

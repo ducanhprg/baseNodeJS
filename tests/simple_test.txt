@@ -1,0 +1,18 @@
+1- run: curl -X POST http://localhost:30001/api/create-request
+Expect result: {"message":"Request processed","requestId":"f9f356c9-13f5-4e00-a709-38437c2a179e"}%
+
+2- run: docker exec -it docker_redis redis-cli
+run: keys *
+expect result:
+1) "request:f9f356c9-13f5-4e00-a709-38437c2a179e:validated"
+2) "request:f9f356c9-13f5-4e00-a709-38437c2a179e:rate_ids"
+
+run: get request:f9f356c9-13f5-4e00-a709-38437c2a179e:validated
+expect result:
+"[{\"rateId\":\"26213889-142d-454b-9575-6475231167f9\",\"validation\":null},{\"rateId\":\"98b2f298-7639-4446-a942-42b4eb49fada\",\"validation\":null},{\"rateId\":\"e06b6aa7-59a6-4b5f-a834-2971f176ea4e\",\"validation\":null},{\"rateId\":\"5cc08c90-a7a8-4808-a4d8-b18d1d8feec5\",\"validation\":null},{\"rateId\":\"f1d1c859-651a-4256-94f2-49dbdcb2a9e9\",\"validation\":null},{\"rateId\":\"cafc567d-7bf9-4d67-86f0-916495f5329f\",\"validation\":null},{\"rateId\":\"3531fcc0-5a53-4fab-a4be-4171f928c9aa\",\"validation\":null},{\"rateId\":\"52a49316-e786-4e4d-b6a8-e1ceb5b3f801\",\"validation\":null},{\"rateId\":\"0d7e1dd1-e7ef-4cdc-8fdf-b0d1a94cdd01\",\"validation\":null},{\"rateId\":\"596d7dea-ca7e-4c69-a4fc-5a87e8162bea\",\"validation\":null}]"
+
+run: get request:f9f356c9-13f5-4e00-a709-38437c2a179e:rate_ids
+expect result:
+"[\"26213889-142d-454b-9575-6475231167f9\",\"98b2f298-7639-4446-a942-42b4eb49fada\",\"e06b6aa7-59a6-4b5f-a834-2971f176ea4e\",\"5cc08c90-a7a8-4808-a4d8-b18d1d8feec5\",\"f1d1c859-651a-4256-94f2-49dbdcb2a9e9\",\"cafc567d-7bf9-4d67-86f0-916495f5329f\",\"3531fcc0-5a53-4fab-a4be-4171f928c9aa\",\"52a49316-e786-4e4d-b6a8-e1ceb5b3f801\",\"0d7e1dd1-e7ef-4cdc-8fdf-b0d1a94cdd01\",\"596d7dea-ca7e-4c69-a4fc-5a87e8162bea\"]"
+
+3- run: docker logs -f consumer

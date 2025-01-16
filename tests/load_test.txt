@@ -1,0 +1,10 @@
+1- run: for i in {1..10}; do curl -X POST http://localhost:30001/api/create-request & done
+result: expect multiple output =D
+
+2- run: docker exec -it docker_redis redis-cli
+run: keys request:*
+
+run: get request:unique_request_id:validated
+run: get request:unique_request_id:rate_ids
+
+3- run: docker logs -f consumer

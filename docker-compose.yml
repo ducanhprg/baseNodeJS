@@ -1,0 +1,35 @@
+services:
+  producer:
+    build: .
+    container_name: producer
+    ports:
+      - '30001:3000'
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run dev
+    networks:
+      - docker-network
+
+  consumer:
+    build: .
+    container_name: consumer
+    ports:
+      - '30002:3000'
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npx ts-node -r tsconfig-paths/register src/entrypoints/consumer.ts
+    networks:
+      - docker-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3001/health" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+networks:
+  docker-network:
+    name: docker-network
+    external: true
